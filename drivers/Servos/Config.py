@@ -1,6 +1,5 @@
 import numpy as np
 from .ServoCalibration import MICROS_PER_RAD
-from .HardwareConfig import PS4_COLOR, PS4_DEACTIVATED_COLOR
 from enum import Enum
 
 # TODO: put these somewhere else
@@ -43,10 +42,7 @@ class ServoParams:
 
 class Configuration:
     def __init__(self):
-        ################# CONTROLLER BASE COLOR ##############
-        self.ps4_color = PS4_COLOR
-        self.ps4_deactivated_color = PS4_DEACTIVATED_COLOR
-
+        
         #################### COMMANDS ####################
         self.max_x_velocity = 0.20
         self.max_y_velocity = 0.20

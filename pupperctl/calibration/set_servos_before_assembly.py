@@ -1,4 +1,10 @@
-from Mangdang.minipupper.HardwareInterface import HardwareInterface
+import sys
+import os
+dir_path  = os.path.dirname(__file__)
+repo_path = os.path.abspath(os.path.join(dir_path, '../..'))
+sys.path.insert(0, repo_path)
+
+from drivers.Servos.HardwareInterface import HardwareInterface
 import numpy as np
 
 

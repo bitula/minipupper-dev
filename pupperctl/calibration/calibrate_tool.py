@@ -1,15 +1,20 @@
+import sys
+import os
+dir_path  = os.path.dirname(__file__)
+repo_path = os.path.abspath(os.path.join(dir_path, '../..'))
+sys.path.insert(0, repo_path)
+
 import re
 import tkinter as tk
 import tkinter.messagebox
 from tkinter import *
 import _thread
 import time
-import os
-import sys
+
 
 import numpy as np
 from pathlib import Path
-from Mangdang.minipupper.HardwareInterface import HardwareInterface
+from drivers.Servos.HardwareInterface import HardwareInterface
 
 ServoCalibrationFilePath = '/sys/bus/nvmem/devices/3-00501/nvmem'
 
@@ -107,7 +112,7 @@ class CalibrationTool:
         self.Title.place(x=140,y=15)
         
         #init robot image
-        self.photo = tk.PhotoImage(file=Path(__file__).with_name('MiniPupper.Calibration.png'))
+        self.photo = tk.PhotoImage(file=os.path.abspath(sys.path[0] + '/assets/calibration.png'))
         self.MainImg = Label(self.MainWindow,image = self.photo)
         self.MainImg.place(x=230,y=60)
 

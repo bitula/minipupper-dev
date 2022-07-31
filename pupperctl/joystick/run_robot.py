@@ -1,7 +1,9 @@
 import sys
-sys.path.insert(0, "../..")
-
 import os
+dir_path  = os.path.dirname(__file__)
+repo_path = os.path.abspath(os.path.join(dir_path, '../..'))
+sys.path.insert(0, repo_path)
+
 import threading
 import time
 
@@ -24,8 +26,13 @@ from JoystickInterface import JoystickInterface
 
 quat_orientation = np.array([1, 0, 0, 0])
 
-cartoons_folder = "../../assets/cartoons/"
+cartoons_folder = repo_path + "/assets/cartoons/"
 current_show = ""
+
+
+# Per-robot configuration file that is particular to each individual robot, not just the type of robot.
+PS4_COLOR = {"red": 0, "blue": 0, "green": 255}
+PS4_DEACTIVATED_COLOR = {"red": 0, "blue": 0, "green": 50}
 
 # TODO fix hardcoded patch
 # with open("/home/ubuntu/.hw_version", "r") as hw_f:
@@ -161,13 +168,13 @@ def main():
         print("Waiting for L1 to activate robot.")
         while True:
             command = joystick_interface.get_command(state)
-            joystick_interface.set_color(config.ps4_deactivated_color)
+            joystick_interface.set_color(PS4_DEACTIVATED_COLOR)
             if command.activate_event == 1:
                 break
             time.sleep(0.1)
         print("Robot activated.")
         is_connect.value = 1
-        joystick_interface.set_color(config.ps4_color)
+        joystick_interface.set_color(PS4_COLOR)
         pic_show(disp, "walk.png", lock)
 
         while True:

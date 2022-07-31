@@ -2,25 +2,23 @@
 
 This is unofficial and very early work in progress to (re)organize and "refactor" [MangDang's QuadrupedRobot](https://github.com/mangdangroboticsclub/QuadrupedRobot.git) repository, in large part insipired by [minipupper_base](https://github.com/hdumcke/minipupper_base.git) repository created by [@hdumcke](https://github.com/hdumcke).
 
-**[NOTE] Calibration GUI/CLI scripts have broken imports**
-
 ## Some notible changes:
-  - No need to connect network cable or monitor with keyboard/mouse to minipupper's RPi
+  - No need to connect network cable or monitor and keyboard/mouse to minipupper's RPi
   - UDPComms is completelly removed
-  - All services except batter and rc.local are removed
-  - Dirves install scripts are removed and moved to makefiles
-  - Code is reorganized into folders according in a more self-discriptive way.
+  - All services except battery and rc.local are removed
+  - Drivers installion scripts are removed and moved to makefiles
+  - Code is reorganized into folders in a more self-discriptive way
   - Python pip packages are installed and run as non-root user
-  - To save some RAM snap is completelly removed (by defualt, it is optional)
+  - To save some RAM snap is completelly removed by defualt (it is optional)
   - Added TigerVNC Xfce4 remote desktop, as optinal install
-  - Default Ubuntu image boot drive is edited before first time boot
-  - Python imports almost every where are edited, probably will change in near future
-  - for now run_robot.py needs to be started manually via ssh or vnc (seems like it works better now)
+  - Default Ubuntu image boot drive is needs to be edited before first time boot
+  - Python imports almost every where are edited, py scripts will work under any user from any folder location.
+  - For now run_robot.py needs to be started manually via ssh or vnc (seems like joystick works better now)
 
 ## Licensing Issue
 While most source code is licensed under MIT, current situation with licensing is not clear to say the least. 
-Until licenses situation is not cleared up, seems the correct acction to not attach any licenses to this repository.
-Issue with Docs and Media files are not under Creative Commons Licenses.
+Until licenses situation is not cleared up, seems the correct action is not attach any licenses to this repository.
+Additionally docs and media files are not under Creative Commons Licenses.
 
 ### GPL source code in this repository
 [EEPROM](drivers/EEPROM/)
@@ -36,24 +34,11 @@ Issue with Docs and Media files are not under Creative Commons Licenses.
 [LCD](drivers/LCD)
 
 
-## The Approximated Future
- - Automation of workstation first time setup
- - Custom Ubuntu Image
- - Configs files for Minipupper parameters 
- - Keyboard/mouse control
- - Website Interface for control and callibration
- - Cross platform Interface (Windows, IOS, Android)
- - Sensors such as lidar, camera, and accelerometer sensor 
- - ROS2 with Gazebo Simulator
- - Docs Website
-
- <!-- Most likely some parts of python code will be rewriten in C -->
-
 **Before making any pull requests please connect me on discord.**
 
 # Instalation Guide
 
-Where console command start with [ ```$ ...``` ] this commands are run on your workstion, commands that are exectured on minipuppers RPi start with [ ```ubuntu@minipupper:~$ ...``` ]
+Where console command start with [ ```$ ...``` ] this commands are run on your workstion, commands that are executed on minipuppers RPi start with [ ```ubuntu@minipupper:~$ ...``` ]
 
 While upgraded ubuntu image works just fine, current installation guide does not use it, because minipuer upgrade script is not implemented.
 
@@ -99,12 +84,12 @@ $ sudo umount /mnt
 Create directory and mount /dev/sdX1, replace X with correct latter, number "1" should be after latter
 
 ```console
-sudo mkdir /mnt/minipupper
-sudo mount /dev/sdX1 /mnt/minipupper
+$ sudo mkdir /mnt/minipupper
+$ sudo mount /dev/sdX1 /mnt/minipupper
 
 Clone repository and copy config.txt to minipupper's boot drive
 ```console
-$ git clone TODO
+$ git clone https://github.com/bitula/minipupper-dev
 $ sudo cp ~/minipupper-dev/init/config.txt /mnt/minipupper/
 ```
 
@@ -214,25 +199,12 @@ replace X.X.X.X with correct ip and copy ssh key to minipupper, default password
 $ cat ~/.ssh/minipupper.pub | ssh ubuntu@X.X.X.X 'dd of=.ssh/authorized_keys oflag=append conv=notrunc'
 ```
 
-Edit ssh configuration or if does not exist create one 
-```console
-$ nano ~/.ssh/config
-$ cat ~/.ssh/config
-Host minipupper
-HostName X.X.X.X
-User ubuntu
-IdentityFile ~/.ssh/minipupper
-```
-
-## Copy minipupper-dev repo and install minipupper's drivers
-
-Sync repository from workstaion to minipupper
-```console
+Edit ssh configuration or if does not exist create one git rebase -i --root release-test
 $ rsync -r ~/minipupper-dev/ minipupper:~/minipupper
 ``` 
 SSH into minipupper
 ```console
-$   ssh minipupper
+$ ssh minipupper
 ```
 To avoid any interupts in case workstation disconnects use tmux to run critical updates/installations
 ```console
@@ -251,11 +223,6 @@ ubuntu@minipupper:~/minipupper$ cat ~/minipupper-dev/install.sh
 ### INSTALL XFC4 & VNCSERVER ### 
 ./scripts/xfcevnc.sh
 ...
-```
-If you want to install vncserver at later time.
-```console
-ubuntu@minipupper:~$ cd minipupper
-ubuntu@minipupper:~/minipupper$ /scripts/xfcevnc.sh
 ```
 
 [OPTIONAL] Do not purge snap, comment out snap removal
@@ -281,13 +248,17 @@ When minipupper is booting, it will make squeaking noise; ~/minipupper-dev/asset
 ```consle
 $ ssh minipupper
 ```
-Start joystick script, no need to run sudo
+Start calibration cli (see guide below for gui tool)
 ```console
-ubuntu@minipupper:~$ cd minipupper/pupperctl/joystick
-ubuntu@minipupper:~/minipupper$ python3 run_robot.py
+ubuntu@minipupper:~$ cd minipupper/ 
+ubuntu@minipupper:~/minipupper$ python3 pupperctl/calibration/calibrate_servos.py 
 ```
 
-**[NOTE] Missing from here pupper calibration via vnc or cli, will be added when code is refactored some more**
+Start joystick script
+```console
+ubuntu@minipupper:~$ cd minipupper
+ubuntu@minipupper:~/minipupper$ python3 pupperctl/joystick/run_robot.py
+```
 
 Once run_robot.py is started screen should turn on.
 
@@ -299,7 +270,7 @@ Once joystick is connected, press L1 to arm minipupper.
 
 <!-- TODO debug bluetooth guide -->
 
-## [OPTIONAL] Setup vscode on workstation
+## [OPTIONAL] Setup vscode remote access on workstation
 <!-- Improve this guide -->
 Setup vscode development on minipupper 
 
@@ -311,6 +282,7 @@ Setup vscode development on minipupper
     5. Connect to minipupper
     6. Open PathToRepo[ TODO ]
 
+## Setup and connect to pupper via VNC, if you have vnc server installed
 To connect to minipupper to vnc server via ssh tunnel
 ```Console
 $ ssh minipupper -L 5901:127.0.0.1:5901
@@ -320,17 +292,31 @@ Start vncserver on minipupper
 ubuntu@minipupper:~$ tigervncserver -SecurityTypes None --I-KNOW-THIS-IS-INSECURE -localhost no :1
 ```
 
-## Setup and connect to pupper via VNC, if you have vnc server installed
+Kill vnc server, when you not using it
+```console
+ubuntu@minipupper:~$ tigervncserver -kill :1
+Killing Xtigervnc process ID XXXX ... success!
+```
+
 In workstation second terminal
 ```console
 $ sudo apt-get update -y
 $ sudo apt-get install -y tigervnc-viewer
 $ vncviewer 127.0.0.1:5901
 ```
-Start terminal within xfce desktop and run callibration tool:
+
+Start terminal in vncviewer window and run callibration tool:
 ```console
-TODO
+ubuntu@minipupper:~$ cd minipupper/
+ubuntu@minipupper:~/minipupper$ python3 pupperctl/calibration/calibrate_tool.py
 ```
+
+In case you did not installed vnc server durring initial installtion, run xfcevnc installation script
+```console
+ubuntu@minipupper:~$ cd minipupper
+ubuntu@minipupper:~/minipupper$ /scripts/xfcevnc.sh
+```
+
 <!-- TODO add windows/mac guide -->
 
 ## Finally backup MicroSD
@@ -351,3 +337,16 @@ Instead of backing up MicroSD you can simply sync changes back to workstation by
 $ rsync -r minipupper:~/minipupper/ ~/minipupper-dev
 ```
 <!-- TODO create rsync script to igoner repo and temp files -->
+
+## The Approximated Future
+ - Automation of workstation first time setup
+ - Custom Ubuntu Image
+ - Configs files for Minipupper parameters 
+ - Keyboard/mouse control
+ - Website Interface for control and callibration
+ - Cross platform Interface (Windows, IOS, Android)
+ - Sensors such as lidar, camera, and accelerometer sensor 
+ - ROS2 with Gazebo Simulator
+ - Docs Website
+
+ <!-- Most likely some parts of python code will be rewriten in C -->

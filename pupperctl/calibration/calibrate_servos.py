@@ -1,5 +1,11 @@
-from Mangdang.minipupper.HardwareInterface import HardwareInterface
-from Mangdang.minipupper.Config import PWMParams, ServoParams
+import sys
+import os
+dir_path  = os.path.dirname(__file__)
+repo_path = os.path.abspath(os.path.join(dir_path, '../..'))
+sys.path.insert(0, repo_path)
+
+from drivers.Servos.HardwareInterface import HardwareInterface
+from drivers.Servos.Config import PWMParams, ServoParams
 import numpy as np
 import re
 
