@@ -79,6 +79,8 @@ class Joystick:
         else:
             # should check here if hci0 exist ?
             subprocess.run(["sudo", "hciconfig", "hci0", "up"])
+            # does not seem to make a diferance
+            subprocess.run(["sudo", "hciconfig", "hci0", "iscan"])
             backend = BluetoothBackend(Daemon.logger)
 
         backend.setup()
@@ -100,9 +102,10 @@ class Joystick:
             pass
 
     def close(self):
-        # TODO shutdown hci0 on exit
         if self.thread is None:
             return
+        # might help with reconnect
+        subprocess.run(["sudo", "hciconfig", "hci0", "reset"])
         self.thread.controller.exit("Cleaning up...")
         self.thread.controller.loop.stop()
 

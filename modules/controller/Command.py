@@ -5,6 +5,10 @@ class Command:
     """
 
     def __init__(self):
+        self.reset()
+
+    # this mess is to keep competability with joystic
+    def reset(self):
         self.update = False
         self.horizontal_velocity = np.array([0, 0])
         self.yaw_rate = 0.0
@@ -23,3 +27,19 @@ class Command:
         
         self.shutdown_signal = False
 
+    def tick_reset(self):
+        self.update = False
+        self.horizontal_velocity = np.array([0, 0])
+        self.yaw_rate = 0.0
+        self.pitch = 0.0
+        self.activation = 0
+
+        self.hop_event = False
+        self.trot_event = False
+        self.activate_event = False
+        self.dance_activate_event = False
+
+        self.dance_switch_event = False
+        self.gait_switch_event = False
+        
+        self.shutdown_signal = False

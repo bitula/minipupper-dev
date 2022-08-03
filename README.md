@@ -251,7 +251,7 @@ $ ssh minipupper
 Start calibration cli (see guide below for gui tool)
 ```console
 ubuntu@minipupper:~$ cd minipupper/ 
-ubuntu@minipupper:~/minipupper$ python3 pupperctl/calibration/calibrate_servos.py 
+ubuntu@minipupper:~/minipupper$ python3 pupperctl/calibration/calibrate_servos.py  
 ```
 
 Start joystick script

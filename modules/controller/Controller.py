@@ -56,6 +56,7 @@ class Controller:
         Numpy array (3, 4)
             Matrix of new foot locations.
         """
+
         contact_modes = self.gait_controller.contacts(state.ticks)
         
         #if command.gait_switch_event == 1:
@@ -87,7 +88,7 @@ class Controller:
         return new_foot_locations, contact_modes
 
 
-    def run(self, state, command,location,attitude,robot_speed):
+    def run(self, state, command, location, attitude, robot_speed):
         """Steps the controller forward one timestep
 
         Parameters
@@ -95,7 +96,6 @@ class Controller:
         controller : Controller
             Robot controller object.
         """
-
         ########## Update operating state based on command ######
         if command.activate_event:
             state.behavior_state = self.activate_transition_mapping[state.behavior_state]
@@ -206,7 +206,7 @@ class Controller:
                 rotated_foot_locations, self.config
             )
 
- # Construct foot rotation matrix to compensate for body tilt
+            # Construct foot rotation matrix to compensate for body tilt
             (roll, pitch, yaw) = quat2euler(state.quat_orientation)
             correction_factor = 0.8
             max_tilt = 0.4

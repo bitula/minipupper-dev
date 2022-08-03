@@ -76,10 +76,10 @@ class JoystickInterface:
         dpady = values["dpad_up"] - values["dpad_down"]
 
         self.input_joystick = {
-            "rx": values["right_analog_x"],
-            "ry": -values["right_analog_y"],
-            "ly": -values["left_analog_y"],
-            "lx": values["left_analog_x"],
+            "rx": values["right_analog_x"], # -1 - 1
+            "ry": -values["right_analog_y"], # -1 - 1
+            "ly": -values["left_analog_y"], # -1 - 1
+            "lx": values["left_analog_x"], # -1 - 1
             "L1": values["button_l1"],
             "L2": values["l2_analog"],
             "R1": values["button_r1"],
@@ -88,11 +88,10 @@ class JoystickInterface:
             "square": values["button_square"],
             "circle": values["button_circle"],
             "triangle": values["button_triangle"],
-            "dpady": dpady,
-            "dpadx": dpadx,
+            "dpady": dpady, # -1 or 1
+            "dpadx": dpadx, # -1 or 1 
             "message_rate": self.message_rate,
         }
-
 
     def get_command(self, state, do_print=False):
 
@@ -159,7 +158,7 @@ class JoystickInterface:
 
         roll_movement = - self.input_joystick["dpadx"]
         self.joystick_cmd.roll = state.roll + message_dt * self.config.roll_speed * roll_movement
-
+        
         return self.joystick_cmd
 
     def set_color(self, color):

@@ -3,7 +3,7 @@
 printf '%s\n' 'Installing MiniPupper Drivers'
 
 ### Install python dependecies
-pip3 install Pillow RPi.GPIO numpy spidev transforms3d 
+pip3 install Pillow RPi.GPIO numpy spidev transforms3d
 
 ## Install boot service
 sudo cp $PWD/init/rc.local /etc/
@@ -40,6 +40,13 @@ sudo systemctl enable  battery_monitor.service
 sudo systemctl enable rc-local
 
 printf '%s\n' 'MiniPupper Drivers Installation Completed'
+
+### Keyboard Mouse Input 
+
+pip install pynput
+# Required for x forwarding, so far worked better the any other terminal emulator
+sudo apt install urxvt
+# TODO add config for urxvt 
 
 printf '%s\n' 'Installing Joystic'
 

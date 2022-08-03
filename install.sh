@@ -34,6 +34,7 @@ sudo sed -i "s/cards.pcm.front/cards.pcm.default/" /usr/share/alsa/alsa.conf
 ### Install dependecies
 sudo apt install -y mc i2c-tools dpkg-dev python-is-python3 python3-tk python3-dev
 
+
 ### Install pip
 wget https://bootstrap.pypa.io/get-pip.py -P /tmp
 python3 /tmp/get-pip.py

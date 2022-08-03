@@ -1,10 +1,10 @@
+#!/usr/bin/env python
 import sys
 import os
 dir_path  = os.path.dirname(__file__)
 repo_path = os.path.abspath(os.path.join(dir_path, '../..'))
 sys.path.insert(0, repo_path)
 
-import threading
 import time
 
 import numpy as np
@@ -19,7 +19,7 @@ from drivers.LCD.gif import AnimatedGif
 from modules.controller import Controller
 from modules.controller import State
 from modules.controller import MovementGroup
-from modules.controller.MovementScheme import MovementScheme # TODO fix this
+from modules.controller.MovementScheme import MovementScheme # TODO fix import
 from modules.controller import Kinematics
 
 from JoystickInterface import JoystickInterface
@@ -185,7 +185,7 @@ def main():
 
             # Parse the udp joystick commands and then update the robot controller's parameters
             command = joystick_interface.get_command(state)
-            #cmd_dump(command)
+            # cmd_dump(command)
             
             _pic = "walk.png" if command.yaw_rate ==0 else "turnaround.png"
             if command.trot_event == True:
@@ -224,9 +224,12 @@ def main():
 
             # Update the pwm widths going to the servos
             hardware_interface.set_actuator_postions(state.joint_angles)
-            current_leg[0]= state.joint_angles[0][0]
-            current_leg[1]= state.joint_angles[1][0]
+            # current_leg[0]= state.joint_angles[0][0]
+            # current_leg[1]= state.joint_angles[1][0]
             #current_leg[2]= state.joint_angles[2][0]
+
+            # print(command.__dict__)
+            # print(command.dance_switch_event)
 try:
     main()
 except KeyboardInterrupt:
