@@ -2,7 +2,7 @@
 
 This is unofficial and very early work in progress to (re)organize and "refactor" [MangDang's QuadrupedRobot](https://github.com/mangdangroboticsclub/QuadrupedRobot.git) repository, in large part insipired by [minipupper_base](https://github.com/hdumcke/minipupper_base.git) repository created by [@hdumcke](https://github.com/hdumcke).
 
-## Some notible changes:
+## Some notible changes from original code base:
   - No need to connect network cable or monitor and keyboard/mouse to minipupper's RPi
   - UDPComms is completelly removed
   - All services except battery and rc.local are removed
@@ -10,13 +10,17 @@ This is unofficial and very early work in progress to (re)organize and "refactor
   - Code is reorganized into folders in a more self-discriptive way
   - Python pip packages are installed and run as non-root user
   - To save some RAM snap is completelly removed by defualt (it is optional)
-  - Added TigerVNC Xfce4 remote desktop, as optinal install
-  - Default Ubuntu image boot drive is needs to be edited before first time boot
-  - Python imports almost every where are edited, py scripts will work under any user from any folder location.
+  - Default Ubuntu image boot drive is must be edited before first time boot
+  - Python imports almost every where are edited, py scripts work from any folder location.
   - For now run_robot.py needs to be started manually via ssh or vnc (seems like joystick works better now)
 
+### New Added Features
+  - EEPROM backup and restore script based on rsync
+  - Keyboard/mouse control via vnc or ssh X forwarding (controlls from joystick are not fully implemented)
+  - Added TigerVNC Xfce4 remote desktop, as optinal install
+  
 ## Licensing Issue
-While most source code is licensed under MIT, current situation with licensing is not clear to say the least. 
+While most source code (not created by me) is licensed under MIT, current situation with licensing is not clear to say the least. 
 Until licenses situation is not cleared up, seems the correct action is not attach any licenses to this repository.
 Additionally docs and media files are not under Creative Commons Licenses.
 
@@ -89,8 +93,8 @@ $ sudo mount /dev/sdX1 /mnt/minipupper
 
 Clone repository and copy config.txt to minipupper's boot drive
 ```console
-$ git clone https://github.com/bitula/minipupper-dev
-$ sudo cp ~/minipupper-dev/init/config.txt /mnt/minipupper/
+$ git clone https://github.com/bitula/minipupper-dev ~/minipupper-dev/source
+$ sudo cp ~/minipupper/source/init/config.txt /mnt/minipupper/
 ```
 
 Edit network-config
@@ -131,11 +135,12 @@ chpasswd:
 hostname: minipupper
 ...
 ```
-[OPTIONAL] Backup config files, **do not copy them into cloned repository**
+[OPTIONAL] Backup config files  
+ **DO NOT copy them into cloned repository**
 ```console
 $ mkdir PupperBackupFolderName
-$ cp /mnt/minipupper/user-data ~/PupperBackupFolderName/user-data.bkp0
-$ cp /mnt/minipupper/network-config ~/PupperBackupFolderName/network-config.bkp0
+$ cp /mnt/minipupper/user-data ~/minipupper-dev/user-data.bkp0
+$ cp /mnt/minipupper/network-config ~/minipupper-dev/network-config.bkp0
 ```
 Unmount microSD
 ```console
@@ -319,30 +324,41 @@ ubuntu@minipupper:~/minipupper$ /scripts/xfcevnc.sh
 
 <!-- TODO add windows/mac guide -->
 
-## Finally backup MicroSD
+## Backups
+
+### MicroSD Backup
 
 Shutdown minipupper
 ```console
 ubuntu@pupper:~$ shutdown now
 ```
-
-Backup  micro SD to workstaion
+After shutdown and inserting Micro SD on workstaion
 ```console
 $ sudo fdisk -l
 $ sudo dd if=/dev/sdX of=minipupper-bk0.img bs=4M conv=sparse status=progress; sync;
 ```
 
+### Folder Sync
 Instead of backing up MicroSD you can simply sync changes back to workstation by using rsync with reverse source and destation (minipupper must be pwered on)
 ```console
-$ rsync -r minipupper:~/minipupper/ ~/minipupper-dev
+$ rsync -r minipupper:~/minipupper/ ~/minipupper-dev/source
 ```
 <!-- TODO create rsync script to igoner repo and temp files -->
+
+### EEPROM Backup and Restore
+To back simply run this script on workstation
+```console
+$ ./rsync-eeprom.sh
+```
+To restore
+```console
+./rsync-eeprom.sh --restore [date-time].eeprom
+```
 
 ## The Approximated Future
  - Automation of workstation first time setup
  - Custom Ubuntu Image
  - Configs files for Minipupper parameters 
- - Keyboard/mouse control
  - Website Interface for control and callibration
  - Cross platform Interface (Windows, IOS, Android)
  - Sensors such as lidar, camera, and accelerometer sensor 
