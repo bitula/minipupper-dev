@@ -45,7 +45,7 @@ printf '%s\n' 'MiniPupper Drivers Installation Completed'
 
 pip install pynput
 # Required for x forwarding, so far worked better the any other terminal emulator
-sudo apt install urxvt
+sudo apt install rxvt-unicode
 # TODO add config for urxvt 
 
 printf '%s\n' 'Installing Joystic'

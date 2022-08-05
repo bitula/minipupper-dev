@@ -16,8 +16,8 @@ This is unofficial and very early work in progress to (re)organize and "refactor
 
 ### New Added Features
   - EEPROM backup and restore script based on rsync
-  - Keyboard/mouse control via vnc or ssh X forwarding (controlls from joystick are not fully implemented)
   - Added TigerVNC Xfce4 remote desktop, as optinal install
+  - Keyboard/mouse control via vnc or ssh X forwarding (requeires TigerVNC Xfce4, controlls from joystick are not fully implemented)
   
 ## Licensing Issue
 While most source code (not created by me) is licensed under MIT, current situation with licensing is not clear to say the least. 

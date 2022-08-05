@@ -43,9 +43,17 @@ done
 chmod 666 /sys/bus/nvmem/devices/3-00500/nvmem
 
 # Allow user to drive LCD
-sudo chmod 666 /dev/spidev0.0
-sudo chmod 666 /dev/mem
-sudo chmod 666 /dev/gpiomem
+# GPIO pin that controlls power to display
+echo 26 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio26/direction
+chmod 666 /sys/class/gpio/gpio26/value
+
+chmod 666 /dev/spidev0.0
+chmod 666 /dev/mem
+chmod 666 /dev/gpiomem
+
+
+
 
 # set cpu performance
 echo performance > /sys/bus/cpu/devices/cpu0/cpufreq/scaling_governor
