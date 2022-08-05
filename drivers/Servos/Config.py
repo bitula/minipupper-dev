@@ -1,6 +1,6 @@
 import numpy as np
-from .ServoCalibration import MICROS_PER_RAD
-from enum import Enum
+
+MICROS_PER_RAD = 11.111 * 180.0 / np.pi
 
 # TODO: put these somewhere else
 class PWMParams:
