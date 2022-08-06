@@ -374,3 +374,9 @@ class ST7789(object):
     def draw(self):
         """Return a PIL ImageDraw instance for 2D drawing on the image buffer."""
         return ImageDraw.Draw(self.buffer)
+
+    def enable(self, flag: bool):
+        if flag:
+            self._gpio.setup(self._led, GPIO.PUD_UP)
+        else:
+            self._gpio.setup(self._led, GPIO.PUD_DOWN)

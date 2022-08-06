@@ -293,8 +293,6 @@ def minipupper_cmds(cmds: Command.Command, uinput: KeyboardMouseEvents, state: S
 
 def main():
 
-    UserInput = KeyboardMouseInterface()
-
     # Create config
     commands = Command.Command()
     config = Configuration()
@@ -319,6 +317,8 @@ def main():
     print("z clearance: ", config.z_clearance)
     print("x shift: ", config.x_shift)
 
+    UserInput = KeyboardMouseInterface()
+
     # Wait until the activate button has been pressed
     while True:
 
@@ -330,6 +330,7 @@ def main():
             cmds = minipupper_cmds(commands, input_events, state, config)
 
             if cmds.activate_event:
+                hardware_interface.enable_servos(1)
                 break
 
             time.sleep(0.1)
@@ -342,6 +343,7 @@ def main():
             cmds = minipupper_cmds(commands, input_events, state, config)
             
             if cmds.activate_event:
+                hardware_interface.enable_servos(0)
                 break
 
             # movement scheme
@@ -363,7 +365,6 @@ def main():
 
             # Update the pwm widths going to the servos
             hardware_interface.set_actuator_postions(state.joint_angles)
-           
 
             # print(cmds.__dict__)
 

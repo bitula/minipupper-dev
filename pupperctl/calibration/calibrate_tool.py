@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import os
 dir_path  = os.path.dirname(__file__)
@@ -337,14 +338,21 @@ def main():
     MainWindow = CalibrationTool('MiniPupper Calibration Tool',800,500)
     MainWindow.readCalibrationFile()
     hardware_interface = HardwareInterface()
+
+    hardware_interface.enable_servos(1)
+
     try:
         _thread.start_new_thread( updateServoValue, ( MainWindow, hardware_interface,) )
     
     except:
         print ('Thread Error')
+        hardware_interface.enable_servos(0)
        
     MainWindow.runMainWindow()
     MainWindow.stopMainWindow()
+    
+    # shutdown servos
+    hardware_interface.enable_servos(0)
 
 if __name__ == "__main__":
     main()

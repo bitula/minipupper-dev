@@ -33,6 +33,8 @@ do
 	echo $i > /sys/class/pwm/pwmchip0/export
 	echo  4000000 > /sys/class/pwm/pwmchip0/pwm$i/period
 	chmod 666 /sys/class/pwm/pwmchip0/pwm$i/duty_cycle
+	### premissions to enable and disable servos
+	chmod 666 /sys/class/pwm/pwmchip0/pwm$i/enable
 done
 
 # Make nvmem user r/w
@@ -51,9 +53,6 @@ chmod 666 /sys/class/gpio/gpio26/value
 chmod 666 /dev/spidev0.0
 chmod 666 /dev/mem
 chmod 666 /dev/gpiomem
-
-
-
 
 # set cpu performance
 echo performance > /sys/bus/cpu/devices/cpu0/cpufreq/scaling_governor

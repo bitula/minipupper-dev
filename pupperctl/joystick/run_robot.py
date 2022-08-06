@@ -151,9 +151,6 @@ def main():
         Kinematics.four_legs_inverse_kinematics,
     )
     state = State.State()
-    print("Creating joystick listener...")
-    joystick_interface = JoystickInterface(config)
-    print("Done.")
 
     last_loop = time.time()
 
@@ -163,6 +160,10 @@ def main():
     print("z clearance: ", config.z_clearance)
     print("x shift: ", config.x_shift)
 
+    print("Creating joystick listener...")
+    joystick_interface = JoystickInterface(config)
+    print("Done.")
+
     # Wait until the activate button has been pressed
     while True:
         print("Waiting for L1 to activate robot.")
@@ -170,6 +171,7 @@ def main():
             command = joystick_interface.get_command(state)
             joystick_interface.set_color(PS4_DEACTIVATED_COLOR)
             if command.activate_event == 1:
+                hardware_interface.enable_servos(1)
                 break
             time.sleep(0.1)
         print("Robot activated.")
@@ -192,6 +194,7 @@ def main():
                 _pic = "walk_r1.png"
             pic_show(disp, _pic, lock)
             if command.activate_event == 1:
+                hardware_interface.enable_servos(0)
                 is_connect.value = 0
                 pic_show(disp, "notconnect.png", lock)
                 print("Deactivating Robot")
@@ -233,4 +236,5 @@ def main():
 try:
     main()
 except KeyboardInterrupt:
+    disp.enable(False)
     pass

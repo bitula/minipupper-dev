@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import os
 dir_path  = os.path.dirname(__file__)
@@ -182,6 +183,8 @@ def main():
     """Main program
     """
     hardware_interface = HardwareInterface()
+
+    hardware_interface.enable_servos(1)
 
     calibrate_angle_offset(hardware_interface)
 

@@ -16,6 +16,14 @@ class HardwareInterface:
     def set_actuator_position(self, joint_angle, axis, leg):
         send_servo_command(self.pwm_params, self.servo_params, joint_angle, axis, leg)
 
+    def enable_servos(self, flag: bool):
+        for leg_index in range(4):
+            for axis_index in range(3):
+                file_node = "/sys/class/pwm/pwmchip0/pwm" + str(self.pwm_params.pins[axis_index, leg_index]) + "/enable"
+                f = open(file_node, "w")
+                f.write(str(flag))
+                f.close()
+
 
 def pwm_to_duty_cycle(pulsewidth_micros, pwm_params):
     """Converts a pwm signal (measured in microseconds) to a corresponding duty cycle on the gpio pwm pin
@@ -92,6 +100,7 @@ def send_servo_commands(pwm_params, servo_params, joint_angles):
             file_node = "/sys/class/pwm/pwmchip0/pwm" + str(pwm_params.pins[axis_index, leg_index]) + "/duty_cycle"
             f = open(file_node, "w")
             f.write(str(duty_cycle))
+            f.close()
 
 
 def send_servo_command(pwm_params, servo_params, joint_angle, axis, leg):
@@ -99,6 +108,7 @@ def send_servo_command(pwm_params, servo_params, joint_angle, axis, leg):
     file_node = "/sys/class/pwm/pwmchip0/pwm" + str(pwm_params.pins[axis, leg]) + "/duty_cycle"
     f = open(file_node, "w")
     f.write(str(duty_cycle))
+    f.close()
 
 
 def deactivate_servos(pi, pwm_params):

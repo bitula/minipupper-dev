@@ -5,19 +5,22 @@ This is unofficial and very early work in progress to (re)organize and "refactor
 ## Some notible changes from original code base:
   - No need to connect network cable or monitor and keyboard/mouse to minipupper's RPi
   - UDPComms is completelly removed
-  - All services except battery and rc.local are removed
+  - Services except battery and rc.local are removed (temprorerrly)
   - Drivers installion scripts are removed and moved to makefiles
   - Code is reorganized into folders in a more self-discriptive way
   - Python pip packages are installed and run as non-root user
   - To save some RAM snap is completelly removed by defualt (it is optional)
   - Default Ubuntu image boot drive is must be edited before first time boot
   - Python imports almost every where are edited, py scripts work from any folder location.
-  - For now run_robot.py needs to be started manually via ssh or vnc (seems like joystick works better now)
+  - Currently, joystick/run_robot.py and keyboard/input.py are started manually via ssh or vnc
 
 ### New Added Features
+  - Screen and Servos are only enabled when one of the pupperctl scripts is running  
+    (exect set_servos and calibrate_servos.py scripts, servos will not be turned of after calibration)
   - EEPROM backup and restore script based on rsync
   - Added TigerVNC Xfce4 remote desktop, as optinal install
-  - Keyboard/mouse control via vnc or ssh X forwarding (requeires TigerVNC Xfce4, controlls from joystick are not fully implemented)
+  - Keyboard/mouse control via vnc or ssh X forwarding  
+    (requeires TigerVNC Xfce4, controlls from joystick are not fully implemented)
   
 ## Licensing Issue
 While most source code (not created by me) is licensed under MIT, current situation with licensing is not clear to say the least. 
@@ -352,7 +355,7 @@ $ ./rsync-eeprom.sh
 ```
 To restore
 ```console
-./rsync-eeprom.sh --restore [date-time].eeprom
+$ ./rsync-eeprom.sh --restore [date-time].eeprom
 ```
 
 ## The Approximated Future
