@@ -1,45 +1,5 @@
 import numpy as np
 
-MICROS_PER_RAD = 11.111 * 180.0 / np.pi
-
-# TODO: put these somewhere else
-class PWMParams:
-    def __init__(self):
-        self.pins = np.array([[15, 12, 9, 6], [14, 11, 8, 5], [13, 10, 7, 4]])
-        self.range = 4096  ## ADC 12 bits
-        self.freq = 250  ## PWM freq
-
-
-class ServoParams:
-    def __init__(self):
-        self.neutral_position_pwm = 1500  # Middle position
-        self.micros_per_rad = MICROS_PER_RAD  # Must be calibrated
-
-        # The neutral angle of the joint relative to the modeled zero-angle in degrees, for each joint
-        try:
-            with open("/sys/bus/nvmem/devices/3-00501/nvmem", "rb") as nv_f:
-                arr1 = np.array(eval(nv_f.readline()))
-                arr2 = np.array(eval(nv_f.readline()))
-                matrix = np.append(arr1, arr2)
-                arr3 = np.array(eval(nv_f.readline()))
-                matrix = np.append(matrix, arr3)
-                matrix.resize(3,4)
-                print("Get nv calibration params: \n" , matrix)
-        except:
-            print("Error, get nv calibration params failed, use default value. Please calibrate your pupper !")
-            matrix = np.array(
-            [[-9, 9, 12, 15], [35, 35, 60, 35], [-30, -27, -22, -48]]
-            )
-        self.neutral_angle_degrees = matrix
-        self.servo_multipliers = np.array(
-            [[1, 1, -1, -1], [-1, 1, -1, 1], [-1, 1, -1, 1]]
-        )
-
-    @property
-    def neutral_angles(self):
-        return self.neutral_angle_degrees * np.pi / 180.0  # Convert to radians
-
-
 class Configuration:
     def __init__(self):
         

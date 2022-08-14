@@ -9,7 +9,9 @@ class Command:
 
     # this mess is to keep competability with joystic
     def reset(self):
+        # Not sure where this is used
         self.update = False
+
         self.horizontal_velocity = np.array([0, 0])
         self.yaw_rate = 0.0
         self.height = -0.07

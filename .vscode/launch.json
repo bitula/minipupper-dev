@@ -2,15 +2,27 @@
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+
+
+    // TODO when running --keyboard monitor is not detects, 
+    // but it should because of .ssh/config 
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "keyboard, no sound, no display",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "${workspaceFolder}/pupperctl.py",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "args": ["--no-sound", "--no-hardware", "--no-display", "--joystick"],
+        },
+        {
+            "name": "joystick, no sound",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pupperctl.py",
+            "console": "integratedTerminal",
+            "args": ["--no-sound", "--joystick"],
         }
     ]
 }

@@ -42,8 +42,8 @@ sudo systemctl enable rc-local
 printf '%s\n' 'MiniPupper Drivers Installation Completed'
 
 ### Keyboard Mouse Input 
-
 pip install pynput
+
 # Required for x forwarding, so far worked better the any other terminal emulator
 sudo apt install rxvt-unicode
 # TODO add config for urxvt 

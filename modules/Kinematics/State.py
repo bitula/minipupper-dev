@@ -15,6 +15,7 @@ class State:
         self.ticks = 0
         self.foot_locations = np.zeros((3, 4))
         self.joint_angles = np.zeros((3, 4))
+        self.quat_orientation = np.array([1, 0, 0, 0]) # QUAD_ORIENTATION = np.array([1, 0, 0, 0])
 
         self.behavior_state = BehaviorState.REST
 

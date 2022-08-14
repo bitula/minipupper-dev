@@ -1,3 +1,5 @@
+# License Unknown
+
 import time
 import subprocess
 import math
@@ -70,7 +72,7 @@ class ActionShim(ReportAction):
 class Joystick:
     def __init__(self):
         self.thread = None
-
+        
         options = load_options()
 
         if options.hidraw:
@@ -84,11 +86,8 @@ class Joystick:
             backend = BluetoothBackend(Daemon.logger)
 
         backend.setup()
-
         self.thread = create_controller_thread(1, options.controllers[0])
-
-        self.thread.controller.setup_device(next(backend.devices))
-
+        self.thread.controller.setup_device(next(backend.devices)) # this is blocking
         self.shim = ActionShim(self.thread.controller)
         self.thread.controller.actions.append(self.shim)
         self.shim.enable()
@@ -110,6 +109,7 @@ class Joystick:
         self.thread.controller.loop.stop()
 
     def __del__(self):
+        print("deleting")
         self.close()
 
     @staticmethod
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     j = Joystick()
     while 1:
         for key, value in j.get_input().items():
-            print(key,value)
+            print(key, value)
         print()
 
         time.sleep(0.1)

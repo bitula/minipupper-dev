@@ -8,8 +8,8 @@ import os
 from PIL import Image
 from PIL import ImageDraw
 
-from drivers.Adafruit_GPIO import GPIO
-from drivers.Adafruit_GPIO import SPI
+from .Adafruit_GPIO import GPIO
+from .Adafruit_GPIO import SPI
 from .gif import AnimatedGif
 
 SPI_CLOCK_HZ = 31200000 # 31.2 MHz
@@ -377,6 +377,6 @@ class ST7789(object):
 
     def enable(self, flag: bool):
         if flag:
-            self._gpio.setup(self._led, GPIO.PUD_UP)
+            self._gpio.setup(self._led, GPIO.LOW)
         else:
-            self._gpio.setup(self._led, GPIO.PUD_DOWN)
+            self._gpio.setup(self._led, GPIO.HIGH)
