@@ -177,16 +177,16 @@ ForwardX11Trusted yes
 
 Sync repository from workstaion to minipupper
 ```console
-$ rsync -r ~/minipupper-dev/ minipupper:~/minipupper
+$ rsync -r ~/minipupper-dev/ minipupper:~/minipupper-dev
 ``` 
 SSH into minipupper
-
+```console
 $ ssh minipupper
 ```
 To avoid any interupts in case workstation disconnects use tmux to run critical updates/installations
 ```console
 ubuntu@minipupper:~$ tmux
-ubuntu@minipupper:~$ cd minipupper
+ubuntu@minipupper:~$ cd minipupper-dev
 ```
 <!-- TODO add option to start tmux by defualt:
  https://stackoverflow.com/questions/27613209/how-to-automatically-start-tmux-on-ssh-session -->
@@ -218,27 +218,26 @@ ubuntu@minipupper:~/minipupper$ cat install.sh
 
 Start insall script, script will reboot RPi when finished
 ```console
-ubuntu@minipupper~/minipupper$ ./install.sh
+ubuntu@minipupper~/minipupper-dev$ ./install.sh
 ```
 ## Test joystick
 When minipupper is booting, it will make squeaking noise; ~/minipupper-dev/assets/battery_sounds/power_on.mp3
 ```consle
 $ ssh minipupper
 ```
-Start calibration cli (see guide below for gui tool)
-```console
-ubuntu@minipupper:~$ cd minipupper/ 
-ubuntu@minipupper:~/minipupper$ TODO  
+Start keyboad/mouse to controller minipupper
+```console 
+ubuntu@minipupper:~$ minipupper/pupperctl.py --keyboard --no-sound 
 ```
 
 Start joystick script
 ```console
-ubuntu@minipupper:~$ cd minipupper
-ubuntu@minipupper:~/minipupper$ 
+ubuntu@minipupper:~$ minipupper-dev/pupperctl.py --joystick --no-sound
 ```
-
-Once run_robot.py is started screen should turn on.
-
+Start pupper with keyboard input wihtout display
+```console 
+ubuntu@minipupper:~$ minipupper-dev/pupperctl.py --joystick --no-sound --no-display
+```
 To connect to joystick hold home button until light starts blinking and after some time light turns green.
 
 If light on joystick turned off, Press and Hold button again (it is not clear why sometimes joystick does not connect)
@@ -291,13 +290,13 @@ ubuntu@minipupper:~/minipupper$ TODO
 In case you did not installed vnc server durring initial installtion, run xfcevnc installation script
 ```console
 ubuntu@minipupper:~$ cd minipupper
-ubuntu@minipupper:~/minipupper$ /scripts/xfcevnc.sh
+ubuntu@minipupper:~/minipupper-dev$ /scripts/xfcevnc.sh
 ```
 ### Start GUI App using X forwarding without vnc
 Make sure that ForwardX11 arguments are in .ssh/config minipupper host, if case there where not added, use -XY argument
 ```console
 $ ssh minipupper
-ubuntu@minipupper:~/minipupper$ TODO
+ubuntu@minipupper:~/minipupper-dev$ TODO
 ```
 
 <!-- TODO add windows/mac guide -->

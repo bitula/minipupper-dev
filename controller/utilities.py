@@ -10,16 +10,20 @@ def chk_rw_access(path, ro=False):
             print("error: {0} has no read premission".format(path))
             return False
     else:
-        print("fatal error: {0} not exported".format(path))
+        print("error: {0} does not exist".format(path))
         return False
     
     return True
 
 
 def chk_direction(path, direction="out"):
-    with open(path, "r") as f:
-        period = f.read()[:-1]
-    if period != direction:
-        return False
+    try:
+        with open(path, "r") as f:
+            d = f.read()[:-1]
+        if d != direction:
+            print("error: incorrect direction", path)
+            return False
+    except Exception as e:
+        print("error:", path, e)
     
     return True

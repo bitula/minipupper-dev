@@ -5,15 +5,8 @@ printf '%s\n' 'Installing MiniPupper Drivers'
 ### Install python dependecies
 pip3 install Pillow RPi.GPIO numpy spidev transforms3d
 
-## Install boot service
-sudo cp $PWD/init/rc.local /etc/
-sudo cp $PWD/init/rc-local.service /lib/systemd/system/
 
-sudo sed -i "s|REPODIR|$PWD|" /etc/rc.local
-sudo sed -i "s/3-00500/3-00501/" /etc/rc.local
-
-## Install controller board drivers and services
-
+## Install controller board drivers and udev rules
 printf '%s\n' 'Installing EEPROM Driver'
 
 cd $PWD/drivers/EEPROM/
@@ -33,13 +26,56 @@ make clean
 make
 make install
 
-printf '%s\n' 'Batter Monitor Installed'
-
-sudo systemctl enable  battery_monitor.service
-
-sudo systemctl enable rc-local
-
 printf '%s\n' 'MiniPupper Drivers Installation Completed'
+
+printf '%s\n' 'Installling UDEV Rules'
+
+sudo cat > /tmp/99-minipupper.rules << EOF
+KERNEL=="pwmchip0", SUBSYSTEM=="pwm", ACTION=="add", RUN+="pwm-minipupper.sh"
+### might not work on all rpi's, because of label attribute, without label script will exec twice.
+KERNELS=="gpiochip0", SUBSYSTEM=="gpio", ACTION=="add", ATTR{label}=="pinctrl-bcm2711", RUN+="gpio-minipupper.sh"
+KERNEL=="3-00501", SUBSYSTEM=="nvmem", ACTION=="add", PROGRAM="/bin/sh -c 'chmod 666 /sys/bus/nvmem/devices/3-00501/nvmem'"
+EOF
+
+sudo cp /tmp/99-minipupper.rules /etc/udev/rules.d/
+
+sudo cat > /tmp/pwm-minipupper.sh << "EOF"
+#!/bin/bash
+
+for i in $(seq 4 15)
+    do
+        echo $i > /sys/class/pwm/pwmchip0/export
+        echo  4000000 > /sys/class/pwm/pwmchip0/pwm$i/period
+        chmod 666 /sys/class/pwm/pwmchip0/pwm$i/duty_cycle
+        chmod 666 /sys/class/pwm/pwmchip0/pwm$i/enable
+    done
+EOF
+
+sudo chmod +x /tmp/pwm-minipupper.sh
+sudo cp /tmp/pwm-minipupper.sh /lib/udev
+
+sudo cat > /tmp/gpio-minipupper.sh << EOF
+#!/bin/bash
+
+# Board power
+echo 21 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio21/direction
+chmod 666 /sys/class/gpio/gpio21/value
+
+echo 25 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio25/direction
+chmod 666 /sys/class/gpio/gpio25/value
+
+# LCD power
+echo 26 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio26/direction
+chmod 666 /sys/class/gpio/gpio26/value
+EOF
+
+sudo chmod +x /tmp/gpio-minipupper.sh
+sudo cp /tmp/gpio-minipupper.sh /lib/udev
+
+printf '%s\n' 'UDEV Rules Installed'
 
 ### Keyboard Mouse Input 
 pip install pynput

@@ -57,35 +57,41 @@ class Interface(BaseModule):
         pass
 
     def chk_pwm(self):
+
+        chk = True
         path = self.PWMCHIP
         if not os.path.exists(path):
             print("error: path {0} does not exist, looks like pwmchip is not intialized".format(path))
             return False
-        
+
         # check premissions
-        for n in range(15):
+        for n in range(4, 15):
             pwm_path = path + "/pwm" + str(n)
             period = pwm_path + "/period"
 
             if chk_rw_access(period, ro=True):
-                with open(period, "r") as f:
-                    period = int(f.read()[:-1])
-                    if period != self.PWM_PERIOD:
-                        print(period, period)
-                        print("error: pwm period value is not expected value of 400000")
-                        return False
+                try:
+                    with open(period, "r") as f:
+                        period = int(f.read()[:-1])
+                        if period != self.PWM_PERIOD:
+                            print(period, period)
+                            print("error: pwm period value is not expected value of 400000")
+                            chk = False
+                except Exception as e:
+                    chk = False
+                    print("fatal error:", path, e)
             else:
-                return False
+                chk = False
 
             _path = pwm_path + "/enable"
             if not chk_rw_access(_path):
-                return False
+                chk = False
 
             _path = pwm_path + "/duty_cycle"
             if not chk_rw_access(_path):
-                return False
+                chk = False
         
-        return True
+        return chk
 
     def set_legs_enable(self, flag: int):
         # TODO should go into sleep position before shutdown

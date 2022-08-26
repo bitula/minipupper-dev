@@ -6,7 +6,7 @@ from controller.utilities import chk_rw_access, chk_direction
 
 class Interface(BaseModule):
     POWER_GPIO     = np.array([21, 25])
-    GPIO           = "/sys/class/gpio/"
+    GPIO           = "/sys/class/gpio"
     NVMEM          = "/sys/bus/nvmem/devices/3-00501/nvmem"
     BATTERY        = "/sys/class/power_supply/max1720x_battery/voltage_now"
     BATTERY_CHK    = 3
@@ -30,11 +30,12 @@ class Interface(BaseModule):
         self.chk_battery() # TODO implement access check
         
         self.chk_ok = self.chk_board()
+        print(self.chk_ok)
         if not self.chk_ok:
             self.shutdown()
             return
         self.set_board_enable(1)
-
+        print("done", self.INIT_NAME)
        
     def on_tick(self) -> None:
         # TODO implement calibration angles set
@@ -78,17 +79,19 @@ class Interface(BaseModule):
         
 
     def chk_board(self):
+        chk = True
+        
         for n in self.POWER_GPIO:
             _path = self.GPIO + "/gpio" + str(n) + "/direction"
             if not chk_rw_access(_path, ro=True):
-                return False
+                chk = False
             if not chk_direction(_path):
-                return False
-
+                chk = False
             if not chk_rw_access(self.GPIO + "/gpio" + str(n) + "/value"):
-                return False
-
-        return True
+                chk = False
+            print(_path, chk)
+        
+        return chk
         
 
     def set_board_enable(self, flag: bool):     
@@ -120,7 +123,7 @@ class Interface(BaseModule):
                     print("failed to parse calibration data from:", filepath)
         
         except Exception as e:
-            print("failed to load calibration values from nvmem: {1}".format(e))
+            print("failed to load calibration values from nvmem: {0}".format(e))
 
 
     ### calibration agles set

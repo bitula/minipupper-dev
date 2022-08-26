@@ -136,7 +136,7 @@ class Interface(BaseModule):
 ```
 4. Replace "BaseModule" in Config.py for controller or interfaces section respectivelly,   
 **Do not change speaker name**
-```json
+```python
 ...
   "speaker": {
       "default": {

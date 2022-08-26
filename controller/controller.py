@@ -192,6 +192,7 @@ class Controller:
         """
             Called each time application is exiting throught atexit
         """
+        # FIXME will error on joystick
         # TODO make sure threads are exited correctly
         # TODO wait for processes to exit, check for zombie processes
         pass
