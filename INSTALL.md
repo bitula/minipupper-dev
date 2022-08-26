@@ -1,6 +1,6 @@
 # Instalation Guide
 
-Where console command start with [ ```$ ...``` ] this commands are run on your workstion, commands that are executed on minipuppers RPi start with [ ```ubuntu@minipupper:~$ ...``` ]
+Where console command start with [ ```$ ...``` ] this commands are run on your workstion, commands that are executed on minipuppers RPi start with [ ```ubuntu@minipupper$ ...``` ]
 
 While upgraded ubuntu image works just fine, current installation guide does not use it, because minipuer upgrade script is not implemented.
 
@@ -177,7 +177,7 @@ ForwardX11Trusted yes
 
 Sync repository from workstaion to minipupper
 ```console
-$ rsync -r ~/minipupper-dev/ minipupper:~/minipupper-dev
+$ rsync -r ~/minipupper-dev/ minipupper~/minipupper-dev
 ``` 
 SSH into minipupper
 ```console
@@ -185,8 +185,8 @@ $ ssh minipupper
 ```
 To avoid any interupts in case workstation disconnects use tmux to run critical updates/installations
 ```console
-ubuntu@minipupper:~$ tmux
-ubuntu@minipupper:~$ cd minipupper-dev
+ubuntu@minipupper$ tmux
+ubuntu@minipupper$ cd minipupper-dev
 ```
 <!-- TODO add option to start tmux by defualt:
  https://stackoverflow.com/questions/27613209/how-to-automatically-start-tmux-on-ssh-session -->
@@ -194,8 +194,8 @@ ubuntu@minipupper:~$ cd minipupper-dev
 [OPTIONAL] Install vnc (remote desktop access to minipupper), uncomment ./scripts/xfcevnc.sh in install.sh
   
 ```console
-ubuntu@minipupper:~/minipupper$ nano install.sh
-ubuntu@minipupper:~/minipupper$ cat ~/minipupper-dev/install.sh
+ubuntu@minipupper~/minipupper$ nano install.sh
+ubuntu@minipupper~/minipupper$ cat ~/minipupper-dev/install.sh
 ...
 ### INSTALL XFC4 & VNCSERVER ### 
 ./scripts/xfcevnc.sh
@@ -204,8 +204,8 @@ ubuntu@minipupper:~/minipupper$ cat ~/minipupper-dev/install.sh
 
 [OPTIONAL] Do not purge snap, comment out snap removal
 ```console
-ubuntu@minipupper:~/minipupper$ nano install.sh 
-ubuntu@minipupper:~/minipupper$ cat install.sh
+ubuntu@minipupper~/minipupper$ nano install.sh 
+ubuntu@minipupper~/minipupper$ cat install.sh
 ...
 # ##### PURGE SNAP ######
 # sudo snap remove lxd
@@ -227,16 +227,16 @@ $ ssh minipupper
 ```
 Start keyboad/mouse to controller minipupper
 ```console 
-ubuntu@minipupper:~$ minipupper/pupperctl.py --keyboard --no-sound 
+ubuntu@minipupper$ minipupper/pupperctl.py --keyboard --no-sound 
 ```
 
 Start joystick script
 ```console
-ubuntu@minipupper:~$ minipupper-dev/pupperctl.py --joystick --no-sound
+ubuntu@minipupper$ minipupper-dev/pupperctl.py --joystick --no-sound
 ```
 Start pupper with keyboard input wihtout display
 ```console 
-ubuntu@minipupper:~$ minipupper-dev/pupperctl.py --joystick --no-sound --no-display
+ubuntu@minipupper$ minipupper-dev/pupperctl.py --joystick --no-sound --no-display
 ```
 To connect to joystick hold home button until light starts blinking and after some time light turns green.
 
@@ -265,12 +265,12 @@ $ ssh minipupper -L 5901:127.0.0.1:5901
 ```
 Start vncserver on minipupper
 ```console
-ubuntu@minipupper:~$ tigervncserver -SecurityTypes None --I-KNOW-THIS-IS-INSECURE -localhost no :1
+ubuntu@minipupper$ tigervncserver -SecurityTypes None --I-KNOW-THIS-IS-INSECURE -localhost no :1
 ```
 
 Kill vnc server, when you not using it
 ```console
-ubuntu@minipupper:~$ tigervncserver -kill :1
+ubuntu@minipupper$ tigervncserver -kill :1
 Killing Xtigervnc process ID XXXX ... success!
 ```
 
@@ -283,20 +283,20 @@ $ vncviewer 127.0.0.1:5901
 
 Start terminal in vncviewer window and run callibration tool: 
 ```console
-ubuntu@minipupper:~$ cd minipupper/
-ubuntu@minipupper:~/minipupper$ TODO
+ubuntu@minipupper$ cd minipupper/
+ubuntu@minipupper~/minipupper$ TODO
 ```
 
 In case you did not installed vnc server durring initial installtion, run xfcevnc installation script
 ```console
-ubuntu@minipupper:~$ cd minipupper
-ubuntu@minipupper:~/minipupper-dev$ /scripts/xfcevnc.sh
+ubuntu@minipupper$ cd minipupper
+ubuntu@minipupper~/minipupper-dev$ /scripts/xfcevnc.sh
 ```
 ### Start GUI App using X forwarding without vnc
 Make sure that ForwardX11 arguments are in .ssh/config minipupper host, if case there where not added, use -XY argument
 ```console
 $ ssh minipupper
-ubuntu@minipupper:~/minipupper-dev$ TODO
+ubuntu@minipupper~/minipupper-dev$ TODO
 ```
 
 <!-- TODO add windows/mac guide -->
@@ -307,7 +307,7 @@ ubuntu@minipupper:~/minipupper-dev$ TODO
 
 Shutdown minipupper
 ```console
-ubuntu@pupper:~$ shutdown now
+ubuntu@pupper$ shutdown now
 ```
 After shutdown and inserting Micro SD on workstaion
 ```console
@@ -318,7 +318,7 @@ $ sudo dd if=/dev/sdX of=minipupper-bk0.img bs=4M conv=sparse status=progress; s
 ### Folder Sync
 Instead of backing up MicroSD you can simply sync changes back to workstation by using rsync with reverse source and destation (minipupper must be pwered on)
 ```console
-$ rsync -r minipupper:~/minipupper/ ~/minipupper-dev/source
+$ rsync -r minipupper~/minipupper/ ~/minipupper-dev/source
 ```
 <!-- TODO create rsync script to igoner repo and temp files -->
 
