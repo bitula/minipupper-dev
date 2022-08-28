@@ -16,10 +16,6 @@ clean:
 install:
 	sudo cp max1720x_battery.ko /lib/modules/`uname -r`/kernel/drivers/power/supply/
 	sudo depmod -a
-	
+
 	dtc i2c4.dts > i2c4.dtbo
 	sudo cp i2c4.dtbo /boot/firmware/overlays/
-
-	sudo cp battery_monitor /usr/bin/
-	sudo sed -i "s|BASEDIR|$(MK_PARENT)|" /usr/bin/battery_monitor
-	sudo cp battery_monitor.service /lib/systemd/system/
